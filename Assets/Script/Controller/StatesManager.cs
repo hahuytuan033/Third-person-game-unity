@@ -14,6 +14,7 @@ namespace Tundayne
             public float moveAmount;
             public Vector3 moveDirection;
             public Vector3 aimPosition;
+            public Vector3 rotateDirection;
         }
 
         [System.Serializable]
@@ -29,25 +30,30 @@ namespace Tundayne
 
         public ControllerStates statesManager;
         public ControllerStatics controllerStatics;
-        public InputVariables input; 
+        public InputVariables input;
 
+        #region References
         public Animator anim;
         public GameObject activeModel;
         [HideInInspector] public Rigidbody rigid;
         [HideInInspector] public Collider controllerCollider;
-        
-        [HideInInspector]public LayerMask ignoreLayer;
-        [HideInInspector]public LayerMask ignoreForGround;
 
+        [HideInInspector] public LayerMask ignoreLayer;
+        [HideInInspector] public LayerMask ignoreForGround;
+
+        [HideInInspector]
         public Transform mTransform;
         public CharState currentState;
         public float delta;
 
         List<Collider> ragdollColliders = new List<Collider>();
         List<Rigidbody> ragdollRigidbodies = new List<Rigidbody>();
+        #endregion
 
+        #region Init
         public void Init()
         {
+            mTransform = this.transform;
             SetUpAnimator();
             rigid = GetComponent<Rigidbody>();
             rigid.isKinematic = false;
@@ -97,35 +103,41 @@ namespace Tundayne
                 ignoreForGround = ~(1 << 9 | 1 << 10);
             }
         }
+        #endregion
 
+        #region FixedUpdate
         public void FixedTick(float d)
-        {
-            delta = d;
-            mTransform = activeModel.transform;
+{
+    delta = d;
+    mTransform = activeModel.transform;
 
-            switch (currentState)
+    switch (currentState)
+    {
+        case CharState.normal:
+            statesManager.onGround = OnGround();
+            
+            if (statesManager.isAiming)
             {
-                case CharState.normal:
-                    statesManager.onGround = OnGround();
-                    if (statesManager.isAiming)
-                    {
-
-                    }
-                    else
-                    {
-                        MovementNormal();
-                        RotationNormal();
-                    }
-                    break;
-                case CharState.onAir:
-                    statesManager.onGround = OnGround();
-                    break;
-                case CharState.cover:
-                    break;
-                case CharState.vaulting:
-                    break;
+                // Khi nhắm
+                MovemtentAiming(); 
             }
-        }
+            else
+            {
+                // Khi không nhắm
+                MovementNormal(); 
+            }
+
+            RotationNormal(); 
+            break;
+        case CharState.onAir:
+            statesManager.onGround = OnGround();
+            break;
+        case CharState.cover:
+            break;
+        case CharState.vaulting:
+            break;
+    }
+}
 
         void MovementNormal()
         {
@@ -155,7 +167,17 @@ namespace Tundayne
 
         void RotationNormal()
         {
-            Vector3 targetDir = input.moveDirection;
+            Vector3 targetDir;
+
+            if (statesManager.isAiming)
+            {
+                targetDir = input.rotateDirection;
+            }
+            else
+            {
+                targetDir = input.moveDirection;
+            }
+
             targetDir.y = 0;
             if (targetDir == Vector3.zero)
             {
@@ -167,17 +189,16 @@ namespace Tundayne
             mTransform.rotation = targetRotation;
         }
 
-        void HandleAnimationsNormal()
-        {
-            float animVertical = input.moveAmount;
-            anim.SetFloat("Vertical", animVertical, 0.15f, delta);
-        }
-
         public void MovemtentAiming()
         {
-
+            float speed = controllerStatics.aimSpeed;
+            Vector3 v = input.moveDirection * speed;
+            rigid.velocity = v;
         }
+        #endregion
 
+
+        #region Update
         public void Tick(float d)
         {
             delta = d;
@@ -186,7 +207,7 @@ namespace Tundayne
             {
                 case CharState.normal:
                     statesManager.onGround = OnGround();
-                    HandleAnimationsNormal();
+                    HandleAnimationAll();
                     break;
                 case CharState.onAir:
                     rigid.drag = 0;
@@ -198,6 +219,46 @@ namespace Tundayne
                     break;
             }
         }
+        void HandleAnimationAll()
+        {
+            anim.SetBool(StaticStrings.sprint, statesManager.isRunning);
+            anim.SetBool(StaticStrings.aiming, statesManager.isAiming);
+            anim.SetBool(StaticStrings.crouch, statesManager.isCrouching);
+
+            if (statesManager.isAiming)
+            {
+                HandleAnimationsAiming();
+            }
+            else
+            {
+                HandleAnimationsNormal();
+            }
+        }
+
+        void HandleAnimationsNormal()
+        {
+            if (input.moveAmount > 0.05f)
+            {
+                rigid.drag = 0;
+            }
+            else
+            {
+                rigid.drag = 4;
+            }
+
+            float animVertical = input.moveAmount;
+            anim.SetFloat(StaticStrings.Vertical, animVertical, 0.15f, delta);
+        }
+
+        void HandleAnimationsAiming()
+        {
+            float vertical = input.vertical;
+            float horizontal = input.horizontal;
+
+            anim.SetFloat(StaticStrings.Horizontal, horizontal, 0.2f, delta);
+            anim.SetFloat(StaticStrings.Vertical, vertical, 0.2f, delta);
+        }
+        #endregion
 
         bool OnGround()
         {

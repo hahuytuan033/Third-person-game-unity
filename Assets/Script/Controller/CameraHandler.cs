@@ -33,6 +33,7 @@ namespace Tundayne
         {
             mTransform = this.transform;
             states = inputHandler.states;
+            
             target = states.mTransform;
         }
 
@@ -43,7 +44,6 @@ namespace Tundayne
             {
                 return;
             }
-
             HandlePosition();
             HandleRotation();
 
@@ -80,7 +80,7 @@ namespace Tundayne
 
             Vector3 newPivotPosition = pivot.localPosition;
             newPivotPosition.x = targetX;
-            newPivotPosition.z = targetY;
+            newPivotPosition.y = targetY;
 
             Vector3 newCamPosition = camTrans.localPosition;
             newCamPosition.z = targetZ;
@@ -113,6 +113,7 @@ namespace Tundayne
             tiltAngle -= smoothY * cameraValues.xRotationSpeed;
             tiltAngle = Mathf.Clamp(tiltAngle, cameraValues.minAngle, cameraValues.maxAngle);
             pivot.localRotation = Quaternion.Euler(tiltAngle, 0, 0);
+
 
         }
     }

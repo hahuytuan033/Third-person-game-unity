@@ -35,6 +35,7 @@ namespace Tundayne
             isInit = true;
         }
 
+        #region FixedUpdate
         void FixedUpdate()
         {
             if (!isInit)
@@ -53,8 +54,8 @@ namespace Tundayne
 
         void GetInputFixedUpdate()
         {
-            vertical = Input.GetAxis("Vertical");
-            horizontal = Input.GetAxis("Horizontal");
+            vertical = Input.GetAxis(StaticStrings.Vertical);
+            horizontal = Input.GetAxis(StaticStrings.Horizontal);
         }
 
         void InGame_UpdateStates_FixedUpdate()
@@ -69,9 +70,12 @@ namespace Tundayne
             moveDirection.Normalize();
             states.input.moveDirection = moveDirection;
 
-
+            states.input.rotateDirection = cameraHandler.mTransform.forward;
         }
+        #endregion
 
+
+        #region Update
         void Update()
         {
             if (!isInit)
@@ -79,9 +83,24 @@ namespace Tundayne
                 return;
             }
             delta = Time.deltaTime;
+            GetInput_Update();
 
+            InGame_UpdateStates_Update();
             states.Tick(delta);
         }
+
+        void InGame_UpdateStates_Update()
+        {
+            states.statesManager.isAiming = aimInput;
+        }
+
+        void GetInput_Update()
+        {
+            aimInput = Input.GetMouseButton(1);
+            Debug.Log(aimInput);
+
+        }
+        #endregion
     }
 
     public enum GamePhase
