@@ -1,19 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-<<<<<<< HEAD
-=======
+
+
 using UnityEngine.Rendering;
->>>>>>> develop
+
 
 namespace Tundayne
 {
     public class AnimatorHook : MonoBehaviour
     {
-<<<<<<< HEAD
-
-    }
-=======
         Animator anim;
         StatesManager states;
 
@@ -205,8 +201,5 @@ namespace Tundayne
         }
         #endregion
     }
-    
 
-
->>>>>>> develop
 }
