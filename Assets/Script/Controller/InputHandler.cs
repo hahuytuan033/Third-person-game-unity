@@ -84,7 +84,11 @@ namespace Tundayne
                 return;
             }
             delta = Time.deltaTime;
+<<<<<<< Updated upstream
             AimPosition(); 
+=======
+            AimPosition();
+>>>>>>> Stashed changes
             GetInput_Update();
 
             InGame_UpdateStates_Update();
@@ -104,8 +108,27 @@ namespace Tundayne
 
         void GetInput_Update()
         {
+<<<<<<< Updated upstream
             aimInput = Input.GetMouseButton(1);
+=======
+            if (Input.GetKeyDown(KeyCode.M))
+            {
+                // Nếu phím "M" được nhấn, đảo ngược giá trị của aimInput
+                aimInput = !aimInput;
+            }
+        }
+>>>>>>> Stashed changes
 
+        void AimPosition()
+        {
+            Ray ray = new Ray(cameraHandler.camTrans.position, cameraHandler.camTrans.forward);
+            states.input.aimPosition = ray.GetPoint(30);
+
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, 100, states.ignoreLayer))
+            {
+                states.input.aimPosition = hit.point;
+            }
         }
 
         void AimPosition()
@@ -128,4 +151,3 @@ namespace Tundayne
         inMenu
     }
 }
-
