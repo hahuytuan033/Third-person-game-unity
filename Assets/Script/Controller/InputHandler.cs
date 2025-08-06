@@ -74,6 +74,7 @@ namespace Tundayne
         }
         #endregion
 
+        public bool debugAim;
 
         #region Update
         void Update()
@@ -83,9 +84,16 @@ namespace Tundayne
                 return;
             }
             delta = Time.deltaTime;
+            AimPosition(); 
             GetInput_Update();
 
             InGame_UpdateStates_Update();
+
+            if (debugAim)
+            {
+                states.statesManager.isAiming = true; ;
+            }
+
             states.Tick(delta);
         }
 
@@ -99,6 +107,18 @@ namespace Tundayne
             aimInput = Input.GetMouseButton(1);
             Debug.Log(aimInput);
 
+        }
+
+        void AimPosition()
+        {
+            Ray ray = new Ray(cameraHandler.camTrans.position, cameraHandler.camTrans.forward);
+            states.input.aimPosition = ray.GetPoint(30);
+
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, 100, states.ignoreLayer))
+            {
+                states.input.aimPosition = hit.point;
+            }
         }
         #endregion
     }

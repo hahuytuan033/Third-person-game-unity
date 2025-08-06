@@ -35,14 +35,16 @@ namespace Tundayne
         #region References
         public Animator anim;
         public GameObject activeModel;
+        [HideInInspector] public AnimatorHook animatorHook;
         [HideInInspector] public Rigidbody rigid;
         [HideInInspector] public Collider controllerCollider;
 
         [HideInInspector] public LayerMask ignoreLayer;
         [HideInInspector] public LayerMask ignoreForGround;
 
-        [HideInInspector]
-        public Transform mTransform;
+        //[HideInInspector] public Transform referencesParent ;
+
+        [HideInInspector] public Transform mTransform;
         public CharState currentState;
         public float delta;
 
@@ -63,6 +65,12 @@ namespace Tundayne
             controllerCollider = GetComponent<Collider>();
 
             SetupRagdoll();
+
+            ignoreLayer = ~(1 << 9);
+            ignoreForGround = ~(1 << 9 | 1 << 10);
+
+            animatorHook = activeModel.AddComponent<AnimatorHook>();
+            animatorHook.Init(this);
         }
 
         void SetUpAnimator()
