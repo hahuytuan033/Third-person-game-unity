@@ -104,8 +104,13 @@ namespace Tundayne
 
         void GetInput_Update()
         {
-            aimInput = Input.GetMouseButton(1);
 
+            aimInput = Input.GetMouseButton(1);
+            if (Input.GetKeyDown(KeyCode.M))
+            {
+                // Nếu phím "M" được nhấn, đảo ngược giá trị của aimInput
+                aimInput = !aimInput;
+            }
         }
 
         void AimPosition()
@@ -128,4 +133,3 @@ namespace Tundayne
         inMenu
     }
 }
-
