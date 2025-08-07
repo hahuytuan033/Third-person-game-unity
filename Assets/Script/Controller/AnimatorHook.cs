@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 <<<<<<< HEAD
 =======
@@ -30,6 +31,18 @@ namespace Tundayne
 
         public bool disable_o_h;
         public bool disable_m_h;
+
+        RuntimeWeapon curWeapon;
+
+        public void EquiqWeapon(RuntimeWeapon rw)
+        {
+            Weapon w = rw.weaponActual;
+            lh_target = rw.weaponHook.leftHandIK;
+
+            rh_target.localPosition = w.ikPos.pos;
+            rh_target.localEulerAngles = w.ikPos.rot;
+            curWeapon = rw;
+        }
 
         public void Init(StatesManager st)
         {
@@ -196,8 +209,8 @@ namespace Tundayne
                     recoilIsInit = false;
                 }
 
-                offsetPosition = Vector3.forward;
-                offsetRotation = Vector3.right * 90;
+                offsetPosition = Vector3.forward * curWeapon.weaponActual.recoilZ.Evaluate(recoilT);
+                offsetRotation = Vector3.right * 90 * curWeapon.weaponActual.recoilY.Evaluate(recoilT);
 
                 rh_target.localPosition = basePosition + offsetPosition;
                 rh_target.localEulerAngles = baseRotation + offsetRotation;
@@ -205,7 +218,7 @@ namespace Tundayne
         }
         #endregion
     }
-    
+
 
 
 >>>>>>> develop

@@ -105,7 +105,6 @@ namespace Tundayne
         void GetInput_Update()
         {
             aimInput = Input.GetMouseButton(1);
-            Debug.Log(aimInput);
 
         }
 

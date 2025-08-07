@@ -31,6 +31,8 @@ namespace Tundayne
         public ControllerStates statesManager;
         public ControllerStatics controllerStatics;
         public InputVariables input;
+        public WeaponManager weaponManager;
+        public ResourcesManager resourcesManager;
 
         #region References
         public Animator anim;
@@ -55,6 +57,7 @@ namespace Tundayne
         #region Init
         public void Init()
         {
+            resourcesManager.Init();
             mTransform = this.transform;
             SetUpAnimator();
             rigid = GetComponent<Rigidbody>();
@@ -71,6 +74,8 @@ namespace Tundayne
 
             animatorHook = activeModel.AddComponent<AnimatorHook>();
             animatorHook.Init(this);
+
+            Init_WeaponManger();
         }
 
         void SetUpAnimator()
@@ -268,6 +273,40 @@ namespace Tundayne
         }
         #endregion
 
+        #region Manager Functions
+        public void Init_WeaponManger()
+        {
+            CreateRunTimeWeapon(weaponManager.mainWeapon_id, ref weaponManager.m_weapon);
+            //EquiqRuntimeWeapon(weaponManager.m_weapon);
+        }
+
+        public void CreateRunTimeWeapon(string id, ref RuntimeWeapon r_w_m)
+        {
+            Weapon w = resourcesManager.GetWeapon(id);
+            RuntimeWeapon rm = resourcesManager.runtime.WeaponToRuntimeWeapon(w);
+
+            GameObject gameObject = Instantiate(w.modelPrefab);
+            rm.m_instance = gameObject;
+            rm.weaponActual = w;
+            rm.weaponHook = gameObject.GetComponent<WeaponHook>();
+            gameObject.SetActive(false);
+
+            Transform p = anim.GetBoneTransform(HumanBodyBones.RightHand);
+            gameObject.transform.parent = p;
+            gameObject.transform.localPosition = Vector3.zero;
+            gameObject.transform.localEulerAngles = Vector3.zero;
+            gameObject.transform.localScale = Vector3.one;
+
+            r_w_m = rm;
+        }
+
+        public void EquiqRuntimeWeapon(RuntimeWeapon rw)
+        {
+            rw.m_instance.SetActive(true);
+            animatorHook.EquiqWeapon(rw);
+         }
+
+        #endregion
         bool OnGround()
         {
             Vector3 origin = mTransform.position;
