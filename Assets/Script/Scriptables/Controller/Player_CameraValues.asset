@@ -14,15 +14,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   turnSmooth: 0.1
   moveSpeed: 9
-  aimSpeed: 25
+  adaptSpeed: 9
   yRotationSpeed: 8
   xRotationSpeed: 8
   minAngle: -35
   maxAngle: 35
   normalZ: -3
   normalX: 0.3
+<<<<<<< HEAD
   aimZ: -1.5
   aimX: 0.58
   normalY: 0.8
+=======
+  normalY: 1.437
+>>>>>>> 58e001d17f0158a0b9d2a8d77e25956832aa8366
   crounchY: 1
-  adaptSpeed: 9
+  aimSpeed: 25
+  aimZ: -1.5
+  aimX: 0.58

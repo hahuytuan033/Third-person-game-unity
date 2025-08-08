@@ -31,6 +31,7 @@ namespace Tundayne
         public ControllerStates statesManager;
         public ControllerStatics controllerStatics;
         public InputVariables input;
+        public WeaponManager w_manager;
 
         #region References
         public Animator anim;
@@ -115,37 +116,37 @@ namespace Tundayne
 
         #region FixedUpdate
         public void FixedTick(float d)
-        {
-            delta = d;
-            mTransform = activeModel.transform;
+{
+    delta = d;
+    mTransform = activeModel.transform;
 
-            switch (currentState)
+    switch (currentState)
+    {
+        case CharState.normal:
+            statesManager.onGround = OnGround();
+            
+            if (statesManager.isAiming)
             {
-                case CharState.normal:
-                    statesManager.onGround = OnGround();
-
-                    if (statesManager.isAiming)
-                    {
-                        // Khi nhắm
-                        MovemtentAiming();
-                    }
-                    else
-                    {
-                        // Khi không nhắm
-                        MovementNormal();
-                    }
-
-                    RotationNormal();
-                    break;
-                case CharState.onAir:
-                    statesManager.onGround = OnGround();
-                    break;
-                case CharState.cover:
-                    break;
-                case CharState.vaulting:
-                    break;
+                // Khi nhắm
+                MovemtentAiming(); 
             }
-        }
+            else
+            {
+                // Khi không nhắm
+                MovementNormal(); 
+            }
+
+            RotationNormal(); 
+            break;
+        case CharState.onAir:
+            statesManager.onGround = OnGround();
+            break;
+        case CharState.cover:
+            break;
+        case CharState.vaulting:
+            break;
+    }
+}
 
         void MovementNormal()
         {
