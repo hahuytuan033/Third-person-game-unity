@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -22,7 +23,7 @@ namespace Tundayne
         Vector3 lookDir;
 
         public bool disable_o_h;
-        public bool disable_m_h;
+        public bool disable_m_h = true; // Variable has been set to true.
 
         public void Init(StatesManager st)
         {
@@ -198,7 +199,4 @@ namespace Tundayne
         }
         #endregion
     }
-    
-
-
 }
