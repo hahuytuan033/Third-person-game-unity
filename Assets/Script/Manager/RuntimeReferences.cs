@@ -2,26 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Tundayne
+namespace Tundayne 
 {
-    [CreateAssetMenu(menuName = "Tundayne/Single Instancee/Runtime References", fileName = "RuntimeReferences")]
+    [CreateAssetMenu(menuName = "Tundayne/Single Instances/Runtime References", fileName = "RuntimeReferences")]
     public class RuntimeReferences : ScriptableObject
     {
-        public List<RuntimeWeapon> runtimeWeapons = new List<RuntimeWeapon>();
+        public List<RuntimeWeapon> runtime_weapons = new List<RuntimeWeapon>();
 
         public void Init()
         {
-            runtimeWeapons.Clear();
-
+            runtime_weapons.Clear();
         }
 
-        public RuntimeWeapon WeaponToRuntimeWeapon(Weapon weapon)
+        public RuntimeWeapon WeaponToRuntimeWeapon(Weapon w)
         {
             RuntimeWeapon rw = new RuntimeWeapon();
-            rw.weaponActual = weapon;
-            rw.curAmmo = weapon.magizineAmmo;
-            rw.curCarrying = weapon.maxAmmo;
-            runtimeWeapons.Add(rw);
+            rw.w_actual = w;
+            rw.curAmmo = w.magizineAmmo;
+            rw.curCrrying = w.maxAmmo;
+
+            runtime_weapons.Add(rw);
+
             return rw;
         }
 
@@ -31,9 +32,10 @@ namespace Tundayne
             {
                 Destroy(rw.m_instance);
             }
-            if (runtimeWeapons.Contains(rw))
+
+            if (runtime_weapons.Contains(rw))
             {
-                runtimeWeapons.Remove(rw);
+                runtime_weapons.Remove(rw);
             }
         }
     }
@@ -42,10 +44,9 @@ namespace Tundayne
     public class RuntimeWeapon
     {
         public int curAmmo;
-        public int curCarrying;
+        public int curCrrying;
         public GameObject m_instance;
-        public WeaponHook weaponHook;
-        public Weapon weaponActual;
+        public WeaponHook w_hook;
+        public Weapon w_actual;
     }
 }
-
