@@ -202,8 +202,4 @@ namespace Tundayne
         #endregion
     }
 
-<<<<<<< Updated upstream
 }
-=======
-}
->>>>>>> Stashed changes
