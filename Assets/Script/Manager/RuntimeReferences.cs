@@ -50,3 +50,7 @@ namespace Tundayne
         public Weapon w_actual;
     }
 }
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
