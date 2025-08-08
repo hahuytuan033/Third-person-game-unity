@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+using UnityEngine.Rendering;
+
+
 namespace Tundayne
 {
     public class AnimatorHook : MonoBehaviour
@@ -197,7 +201,5 @@ namespace Tundayne
         }
         #endregion
     }
-    
-
 
 }

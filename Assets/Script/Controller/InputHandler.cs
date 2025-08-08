@@ -84,7 +84,7 @@ namespace Tundayne
                 return;
             }
             delta = Time.deltaTime;
-            AimPosition(); 
+            AimPosition();
             GetInput_Update();
 
             InGame_UpdateStates_Update();
@@ -104,8 +104,6 @@ namespace Tundayne
 
         void GetInput_Update()
         {
-
-            aimInput = Input.GetMouseButton(1);
             if (Input.GetKeyDown(KeyCode.M))
             {
                 // Nếu phím "M" được nhấn, đảo ngược giá trị của aimInput

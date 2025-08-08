@@ -116,37 +116,37 @@ namespace Tundayne
 
         #region FixedUpdate
         public void FixedTick(float d)
-{
-    delta = d;
-    mTransform = activeModel.transform;
+        {
+            delta = d;
+            mTransform = activeModel.transform;
 
-    switch (currentState)
-    {
-        case CharState.normal:
-            statesManager.onGround = OnGround();
-            
-            if (statesManager.isAiming)
+            switch (currentState)
             {
-                // Khi nhắm
-                MovemtentAiming(); 
-            }
-            else
-            {
-                // Khi không nhắm
-                MovementNormal(); 
-            }
+                case CharState.normal:
+                    statesManager.onGround = OnGround();
 
-            RotationNormal(); 
-            break;
-        case CharState.onAir:
-            statesManager.onGround = OnGround();
-            break;
-        case CharState.cover:
-            break;
-        case CharState.vaulting:
-            break;
-    }
-}
+                    if (statesManager.isAiming)
+                    {
+                        // Khi nhắm
+                        MovemtentAiming();
+                    }
+                    else
+                    {
+                        // Khi không nhắm
+                        MovementNormal();
+                    }
+
+                    RotationNormal();
+                    break;
+                case CharState.onAir:
+                    statesManager.onGround = OnGround();
+                    break;
+                case CharState.cover:
+                    break;
+                case CharState.vaulting:
+                    break;
+            }
+        }
 
         void MovementNormal()
         {
